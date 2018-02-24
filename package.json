@@ -1,0 +1,61 @@
+{
+  "name": "kodi-deduplicator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "prettify": "prettier --write *.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "kodi-ws": "^2.4.3"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.1",
+    "eslint-plugin-prettier": "^2.6.0",
+    "nodemon": "^1.15.1",
+    "prettier": "^1.10.2"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "bracketSpacing": true,
+    "jsxBracketSameLine": false,
+    "parser": "flow",
+    "printWidth": 120,
+    "tabWidth": 4,
+    "arrowParens": "avoid",
+    "semi": true
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 6
+    },
+    "plugins": [
+      "prettier"
+    ],
+    "rules": {
+      "prefer-template": "error",
+      "prefer-arrow-callback": "error",
+      "prettier/prettier": [
+        "error",
+        {
+          "singleQuote": true,
+          "trailingComma": "es5",
+          "bracketSpacing": true,
+          "jsxBracketSameLine": false,
+          "parser": "flow",
+          "printWidth": 120,
+          "tabWidth": 4,
+          "arrowParens": "avoid",
+          "semi": true
+        }
+      ]
+    }
+  }
+}
