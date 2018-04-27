@@ -11,6 +11,17 @@ function getWorstVideo(v1, v2) {
     const v1v = v1.streamdetails.video[0];
     const v2v = v2.streamdetails.video[0];
 
+    // check for significantly higher resolution (e.g. 1080 > 720)
+    if (v1v && v2v) {
+        if (v1v.height > v2v.height + 100) {
+            return v2worst;
+        }
+        if (v1v.height < v2v.height - 100) {
+            return v1worst;
+        }
+    }
+
+    // check for subtitle count (e.g. 1 > 0)
     if (v1.streamdetails.subtitle.length > v2.streamdetails.subtitle.length) {
         return v2worst;
     }
@@ -21,6 +32,7 @@ function getWorstVideo(v1, v2) {
     if (!v2v) return v2worst;
     if (!v1v) return v1worst;
 
+    // check for higher resolution (small diffs, e.g. 720 > 719)
     if (v1v.height > v2v.height) {
         return v2worst;
     }
@@ -28,6 +40,7 @@ function getWorstVideo(v1, v2) {
         return v1worst;
     }
 
+    // check for duration (e.g. 5500 secs > 5420 secs)
     if (v1v.duration > v2v.duration) {
         return v2worst;
     }
