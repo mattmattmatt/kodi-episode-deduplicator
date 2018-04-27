@@ -69,9 +69,10 @@ function getDeletableDuplicates() {
                     'season',
                     'file',
                 ],
+                // only get unwatched episodes
                 filter: { field: 'playcount', operator: 'is', value: '0' },
             })
-                .then(r => r.episodes)
+                .then(response => response.episodes)
                 // build map of unique episodes with array of files
                 .then(episodes =>
                     episodes.reduce((acc, episode) => {
@@ -136,5 +137,5 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`👂  Listening on port ${port}`);
     console.log(`🌍  Visit http://localhost:${port} to see duplicate episodes`);
-    console.log(`✅  Visit http://localhost:${port}?mark_watched=true to mark duplicate episodes as watched`);
+    console.log(`⚠️  Visit http://localhost:${port}?mark_watched=true to mark duplicate episodes as watched`);
 });
