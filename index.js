@@ -51,6 +51,41 @@ function getWorstVideo(v1, v2) {
     return 0;
 }
 
+function getHtmlResponse(episodes, wasMarkedWatched) {
+    return `
+        <html><body>
+            <style type="text/css">
+            body {
+                font-family: sans-serif;
+                line-height: 1.3;
+            }
+            </style>
+            ${
+                episodes
+                    ? `<h1>No duplicate episodes found</h1>`
+                    : `
+                <h1>Episodes that ${wasMarkedWatched ? 'were' : 'will be'} marked as watched:</h1>
+                <ul>
+                    <li>
+                    ${episodes
+                        .map(episode => {
+                            return `
+                            ${episode.showtitle} – ${episode.label}<br />
+                            Subtitle count: ${episode.streamdetails.subtitle.length}<br />
+                            Video: ${episode.streamdetails.video[0].height}<br />
+                            Duration: ${Math.round(episode.streamdetails.video[0].duration / 60)} minutes
+                        `;
+                        })
+                        .join('</li><li>')}
+                    </li>
+                </ul>
+                ${wasMarkedWatched ? '<a href="?">Check again</a>' : '<a href="?mark_watched=true">Mark as watched</a>'}
+            `
+            }
+        </body></html>
+    `;
+}
+
 function getKodiConnection() {
     return kodi(kodiHost, kodiWebsocketPort);
 }
@@ -126,7 +161,16 @@ app.get('/', (req, res) => {
             return episodes;
         })
         .then(episodes => {
-            res.json(episodes);
+            if (req.query.json !== undefined) {
+                if (episodes) {
+                    res.json(episodes);
+                }
+            }
+            return episodes;
+        })
+        .then(episodes => {
+            res.send(getHtmlResponse(episodes, req.query.mark_watched === 'true'));
+            return episodes;
         })
         .catch(error => {
             console.error(error);

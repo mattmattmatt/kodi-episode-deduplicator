@@ -9,6 +9,7 @@ It can be started by visiting a simple URL.
 1. Run `npm install`
 1. Run `npm start`
 1. Visit [`http://localhost:3000`](http://localhost:3000) to just see what duplicates you have
+1. Visit [`http://localhost:3000?json`](http://localhost:3000?json) to see the same in JSON with more technical details
 1. Visit [`http://localhost:3000?mark_watched=true`](http://localhost:3000?mark_watched=true) to mark all but one duplicate per episode as watched
 
 The script will prefer to keep episodes with subtitles and higher resolutions unwatched.
