@@ -169,14 +169,10 @@ app.get('/', (req, res) => {
         })
         .then(episodes => {
             if (req.query.json !== undefined) {
-                if (episodes) {
-                    res.json(episodes);
-                }
+                res.json(episodes || []);
+            } else {
+                res.send(getHtmlResponse(episodes, req.query.mark_watched === 'true'));
             }
-            return episodes;
-        })
-        .then(episodes => {
-            res.send(getHtmlResponse(episodes, req.query.mark_watched === 'true'));
             return episodes;
         })
         .catch(error => {
