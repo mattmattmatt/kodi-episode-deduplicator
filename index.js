@@ -61,7 +61,7 @@ function getHtmlResponse(episodes, wasMarkedWatched) {
             }
             </style>
             ${
-                episodes
+                episodes.length === 0
                     ? `<h1>No duplicate episodes found</h1>`
                     : `
                 <h1>Episodes that ${wasMarkedWatched ? 'were' : 'will be'} marked as watched:</h1>
