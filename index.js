@@ -139,16 +139,23 @@ function getDeletableDuplicates() {
 
 function setEpisodesWatched(episodes) {
     return getKodiConnection().then(kodi => {
-        episodes.forEach(episode => {
+        // curry'd function that will return a promise once executed
+        const getPromise = episode => () => {
             console.log('  ⏹  Marking as watched:', episode.showtitle, episode.label);
-            kodi.VideoLibrary.SetEpisodeDetails({ episodeid: episode.episodeid, playcount: 1 })
+            return kodi.VideoLibrary.SetEpisodeDetails({ episodeid: episode.episodeid, playcount: 1 })
                 .then(() => {
                     console.log('  ✅  Marked as watched:', episode.showtitle, episode.label, episode.uniqueid);
+                })
+                .then(() => {
+                    return new Promise(resolve => setTimeout(resolve, 200));
                 })
                 .catch(e => {
                     console.error('🛑  Error during', episode.showtitle, episode.label, e);
                 });
-        });
+        };
+
+        // sequentially execute curry'd promises
+        episodes.map(e => getPromise(e)).reduce((p, fn) => p.then(fn), Promise.resolve());
         return episodes;
     });
 }
@@ -177,7 +184,6 @@ app.get('/', (req, res) => {
             res.status(503).json(error);
         });
 });
-
 app.listen(port, () => {
     console.log(`👂  Listening on port ${port}`);
     console.log(`🌍  Visit http://localhost:${port} to see duplicate episodes`);
